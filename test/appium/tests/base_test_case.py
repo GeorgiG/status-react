@@ -28,9 +28,18 @@ class AbstractTestCase:
     def executor_sauce_lab(self):
         return 'http://%s:%s@ondemand.saucelabs.com:80/wd/hub' % (self.sauce_username, self.sauce_access_key)
 
+    # @property
+    # def executor_local(self):
+    #     return 'http://localhost:4723/wd/hub'
+
+    # Georgi
     @property
     def executor_local(self):
-        return 'http://localhost:4723/wd/hub'
+        starting_port = 4723
+        for port in range(2):
+            appium_instance = 'http://localhost:' + str(starting_port) + '/wd/hub'
+            starting_port += 1
+            return appium_instance
 
     def get_public_url(self, driver):
         token = hmac.new(bytes(self.sauce_username + ":" + self.sauce_access_key, 'latin-1'),

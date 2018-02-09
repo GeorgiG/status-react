@@ -4,7 +4,7 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 from datetime import datetime
 
-from views.base_element import BaseButton, BaseElement, BaseEditBox, BaseText
+from views.base_element import BaseButton, BaseElement, BaseEditBox, BaseText, HamburgerMenu
 
 
 class BackButton(BaseButton):
@@ -69,7 +69,9 @@ class ContinueButtonAPK(BaseButton):
 class HomeButton(BaseButton):
     def __init__(self, driver):
         super(HomeButton, self).__init__(driver)
-        self.locator = self.Locator.xpath_selector("//*[@text='Home']/..")
+        # self.locator = self.Locator.xpath_selector("//*[@text='Home']/..")
+        # Georgi
+        self.locator = self.Locator.xpath_selector("(//android.view.ViewGroup[@content-desc='icon'])[1]/android.view.View")
 
     def navigate(self):
         from views.home_view import HomeView
@@ -89,7 +91,10 @@ class WalletButton(BaseButton):
 class ProfileButton(BaseButton):
     def __init__(self, driver):
         super(ProfileButton, self).__init__(driver)
-        self.locator = self.Locator.xpath_selector("//*[@text='Profile']/..")
+        # self.locator = self.Locator.xpath_selector("//*[@text='Profile']/..")
+        # Georgi
+        self.locator = self.Locator.xpath_selector("(//android.view.ViewGroup[@content-desc='icon'])[1]/android.view.View")
+
 
     def navigate(self):
         from views.profile_view import ProfileView
@@ -131,6 +136,8 @@ class BaseView(object):
         self.button = WalletButton(self.driver)
         self.wallet_button = self.button
         self.profile_button = ProfileButton(self.driver)
+        # Georgi
+        self.hamburger_menu = HamburgerMenu(self.driver)
 
         self.yes_button = YesButton(self.driver)
         self.no_button = NoButton(self.driver)

@@ -1,4 +1,5 @@
 from tests import get_current_time
+import time
 
 
 def create_user(console):
@@ -26,6 +27,9 @@ def recover_access(console, passphrase, password, username):
 
 def get_public_key(home):
     profile_view = home.profile_button.click()
+    # Georgi
+    time.sleep(3)
+    tap_on_hamb_menu = home.driver.tap([(175, 270)])
     return profile_view.public_key_text.text
 
 
@@ -39,7 +43,10 @@ def add_contact(home, public_key):
     start_new_chat.add_new_contact.click()
     start_new_chat.public_key_edit_box.send_keys(public_key)
     start_new_chat.confirm()
-    start_new_chat.confirm_public_key_button.click()
+    # start_new_chat.confirm_public_key_button.click()
+    # Georgi
+    home.driver.implicitly_wait(10)
+    confirm_public_key = home.driver.tap([(1004, 233)])
 
 
 def create_group_chat(home, username_to_add, group_chat_name='new_group_chat'):

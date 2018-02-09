@@ -44,6 +44,41 @@ class TestMultipleDevices(MultipleDeviceTestCase):
             discover.find_full_text(user_details['name'])
             discover.find_full_text('%s ' % user_details['status'])
 
+    # Georgi:
+    # Create test according to scenario below and submit your PR:
+    #
+    #    Create 2 users from scratch on 2 devices
+    #    As user A, add user B to contacts
+    #    As user A, send several messages on several different languages to user B
+    #    As user B, verify that all messages received and displayed correctly
+
+    # run with:  python -m pytest -m abchat -v --env=local --apk="\path\to\your\apk_file"
+    @pytest.mark.abchat
+    def test_a_to_b_chat(self):
+        device_1, device_2 = ConsoleView(self.driver_1), ConsoleView(self.driver_2)
+        for device in device_1, device_2:
+            user_flow.create_user(device)
+            device.back_button.click()
+        device_1_home, device_2_home = device_1.get_home_view(), device_2.get_home_view()
+
+        device_1_public_key = user_flow.get_public_key(device_1_home)
+        print("dev1 pk " + str(device_1_public_key))
+        user_flow.add_contact(device_2_home, device_1_public_key)
+        device_2_chat = device_2_home.get_chat_view()
+        message_1 = 'SOMETHING'
+        device_2_chat.chat_message_input.send_keys(message_1)
+        device_2_chat.send_message_button.click()
+
+        # message_2 = 'another SOMETHING'
+        message_2 = 'noch ETWAS'
+        device_1_home.home_button.click()
+        device_1_home.find_full_text(message_1)
+        device_1_home.element_by_text(message_1, 'button').click()
+        device_1_chat = device_1_home.get_chat_view()
+        device_1_chat.chat_message_input.send_keys(message_2)
+        device_1_chat.send_message_button.click()
+        device_2_chat.find_full_text(message_2)
+
     @pytest.mark.chat
     def test_one_to_one_chat(self):
         device_1, device_2 = ConsoleView(self.driver_1), ConsoleView(self.driver_2)
@@ -117,6 +152,7 @@ class TestMultipleDevices(MultipleDeviceTestCase):
         group_chat_d1.find_text_part("removed you from group chat")
         if group_chat_d1.element_by_text(message_3, 'text').is_element_present(20):
             pytest.fail('Message is shown for the user which has been removed from the GroupChat', False)
+
 
     @pytest.mark.transaction
     @pytest.mark.parametrize("test, recipient, sender", [('group_chat',

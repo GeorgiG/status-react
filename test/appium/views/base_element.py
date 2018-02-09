@@ -116,3 +116,10 @@ class BaseButton(BaseElement):
         self.find_element().click()
         self.info('Tap on %s' % self.name)
         return self.navigate()
+
+
+# Georgi
+class HamburgerMenu(BaseButton):
+    def __init__(self, driver):
+        super(HamburgerMenu, self).__init__(driver)
+        self.locator = self.Locator.xpath_selector("//*[@resource-id='toolbar-hamburger-menu']")

@@ -1,6 +1,6 @@
 import logging
 
-from views.base_element import BaseText, BaseButton, BaseEditBox
+from views.base_element import BaseText, BaseButton, BaseEditBox, HamburgerMenu
 from views.base_view import BaseView
 
 
@@ -23,6 +23,12 @@ class ProfileAddressText(BaseText):
         super(ProfileAddressText, self).__init__(driver)
         self.locator = self.Locator.accessibility_id('profile-address')
 
+# # Georgi
+# class ProfileHamburgerMenu(BaseButton):
+#     def __init__(self, driver):
+#         super(ProfileHamburgerMenu, self).__init__(driver)
+#         self.locator = self.Locator.xpath_selector(
+#             "//android.view.ViewGroup[@content-desc='toolbar-hamburger-menu']/android.view.ViewGroup")
 
 class OptionsButton(BaseButton):
 
@@ -95,6 +101,8 @@ class ProfileView(BaseView):
         self.user_status_input = OptionsButton.UserStatusInput(self.driver)
         self.public_key_text = PublicKeyText(self.driver)
         self.profile_address_text = ProfileAddressText(self.driver)
+        # Georgi
+        self.hamburger_menu = HamburgerMenu(self.driver)
 
         self.network_settings_button = NetworkSettingsButton(self.driver)
         self.connect_button = NetworkSettingsButton.ConnectButton(self.driver)
